@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as lng
+from scipy import linalg as slng
 
 def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
     """
@@ -8,7 +9,7 @@ def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
     maxIteration: The maximum number of QR iteration done by the algorithm
     ConvAlert   : if True, the method raise an error when the method does not converge in less than maxIteration iterations
 
-    return  : The eigenvalues and eigenvectors of the given matrix
+    return  : The eigenvalues of the given matrix
     """
 
     iteration = 0
@@ -26,10 +27,11 @@ def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
 
     if iteration >= maxIteration and ConvAlert:
         raise Exception("method does not converge in " + str(maxIteration) + " iterations")
-    
-    eigenvalues = np.diagonal(Ai)
+    eigenValues = np.diagonal(Ai)
 
-    return eigenvalues
+    return eigenValues
+
+
 
 A = np.array([[1,2],[2,1]])
 
