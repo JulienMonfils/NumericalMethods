@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import linalg as lng
-from scipy import linalg as slng
+from sympy import Matrix
 
 def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
     """
@@ -28,8 +28,22 @@ def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
     if iteration >= maxIteration and ConvAlert:
         raise Exception("method does not converge in " + str(maxIteration) + " iterations")
     eigenValues = np.diagonal(Ai)
+    
+    eigenVectors = np.zeros(np.shape(matrix))
+    count = 0
+    for eig in eigenValues:
+        M = matrix - np.eye(len(matrix))*eig
+        ns = nullSpaceSolver(M)
+        print(M, ns)
+        for j in ns:
+            print(j[:,0], eigenVectors[:,count])
+            eigenVectors[:,count] = j[:,0]
+            count+=1
 
-    return eigenValues
+
+    
+
+    return eigenValues, eigenVectors
 
 
 def nullSpaceSolver(matrix):
@@ -39,18 +53,13 @@ def nullSpaceSolver(matrix):
     return  : the null space of the matrix
     """
 
-    n = len(matrix)
+    m = Matrix(matrix)
+    ns = np.array(m.nullspace())
 
-    #Reduction of the matrix
-    for i in range(n):
-        for j in range(n-1, i, -1):
-            matrix[j,:] = matrix[j,:] -  (matrix[j,i]/matrix[i,i])*matrix[i,:]
-    print(matrix)
-    #TODO choosing the row with the biggest values when doing the elimination (better stability)
-
-    #TODO computing the nullSpace of a uppertriangular matrix (det(A) = 0)
+    return ns
     
-A = np.array([[1,1],[2,2]])
+   
+A = np.array([[1,2],[2,1]])
 B = np.array([[1,1,1],[2,2,2],[2,1,2]])
-nullSpaceSolver(B)
+nullSpaceSolver(A)
 print(QRMethod(A, 10**(-5), 15, ConvAlert=True))
