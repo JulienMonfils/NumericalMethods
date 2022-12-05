@@ -32,7 +32,25 @@ def QRMethod(matrix, precision, maxIteration, ConvAlert = False):
     return eigenValues
 
 
+def nullSpaceSolver(matrix):
+    """
+    matrix  : the square matrix we compute the nullSpace
 
-A = np.array([[1,2],[2,1]])
+    return  : the null space of the matrix
+    """
 
+    n = len(matrix)
+
+    #Reduction of the matrix
+    for i in range(n):
+        for j in range(n-1, i, -1):
+            matrix[j,:] = matrix[j,:] -  (matrix[j,i]/matrix[i,i])*matrix[i,:]
+    print(matrix)
+    #TODO choosing the row with the biggest values when doing the elimination (better stability)
+
+    #TODO computing the nullSpace of a uppertriangular matrix (det(A) = 0)
+    
+A = np.array([[1,1],[2,2]])
+B = np.array([[1,1,1],[2,2,2],[2,1,2]])
+nullSpaceSolver(B)
 print(QRMethod(A, 10**(-5), 15, ConvAlert=True))
